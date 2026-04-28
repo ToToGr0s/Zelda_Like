@@ -232,6 +232,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4102448583707551560, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: fillColor.g
+      value: 0.674613
+      objectReference: {fileID: 0}
+    - target: {fileID: 4102448583707551560, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: wireColor.g
+      value: 0.6794095
+      objectReference: {fileID: 0}
     - target: {fileID: 4987919228279096151, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

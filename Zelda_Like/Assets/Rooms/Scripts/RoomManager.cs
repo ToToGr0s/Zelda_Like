@@ -1,14 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class RoomTheme
+{
+    public string themeName;
+    public GameObject[] roomPrefabs;
+    public int roomCount;
+}
+
 public class RoomManager : MonoBehaviour
 {
     [Header("Start")]
     [SerializeField] private GameObject startRoomPrefab;
 
-    [Header("Rooms")]
-    [SerializeField] private GameObject[] roomPrefabs;
-    [SerializeField] private int roomCount = 10;
+    [Header("Themes")]
+    [SerializeField] private RoomTheme[] themes;
+
     [SerializeField] private float roomWidth = 20f;
     [SerializeField] private float roomLength = 20f;
     [SerializeField] private float floorY = -0.5f;
@@ -43,60 +51,64 @@ public class RoomManager : MonoBehaviour
         ClearDungeon();
         startRoomExitCreated = false;
 
-        RoomNode startNode = CreateStartRoom();
-        int generatedNormalRooms = 0;
+        CreateStartRoom();
 
-        while (generatedNormalRooms < roomCount && expandableRooms.Count > 0)
+        foreach (RoomTheme theme in themes)
         {
-            RoomNode parent = GetRandomExpandableRoom();
+            int generatedInTheme = 0;
 
-            if (parent == null)
-                break;
-
-            List<Vector2Int> availableDirections = GetAvailableDirections(parent);
-
-            if (availableDirections.Count == 0 || parent.Children.Count >= maxChildrenPerRoom)
+            while (generatedInTheme < theme.roomCount && expandableRooms.Count > 0)
             {
-                expandableRooms.Remove(parent);
-                continue;
-            }
+                RoomNode parent = GetRandomExpandableRoom();
 
-            Vector2Int chosenDirection;
+                if (parent == null)
+                    break;
 
-            if (!startRoomExitCreated && parent.IsStartRoom && availableDirections.Contains(Vector2Int.up))
-            {
-                chosenDirection = Vector2Int.up;
-                startRoomExitCreated = true;
-            }
-            else
-            {
-                chosenDirection = GetRandomDirectionWithUpBias(availableDirections);
-            }
+                List<Vector2Int> availableDirections = GetAvailableDirections(parent);
 
-            Vector2Int newGridPosition = parent.GridPosition + chosenDirection;
-            GameObject roomPrefab = GetValidRoomPrefabForPosition(newGridPosition);
+                if (availableDirections.Count == 0 || parent.Children.Count >= maxChildrenPerRoom)
+                {
+                    expandableRooms.Remove(parent);
+                    continue;
+                }
 
-            if (roomPrefab == null)
-            {
-                parent.BlockedDirections.Add(chosenDirection);
+                Vector2Int chosenDirection;
 
-                if (GetAvailableDirections(parent).Count == 0 || parent.Children.Count >= maxChildrenPerRoom)
+                if (!startRoomExitCreated && parent.IsStartRoom && availableDirections.Contains(Vector2Int.up))
+                {
+                    chosenDirection = Vector2Int.up;
+                    startRoomExitCreated = true;
+                }
+                else
+                {
+                    chosenDirection = GetRandomDirectionWithUpBias(availableDirections);
+                }
+
+                Vector2Int newGridPosition = parent.GridPosition + chosenDirection;
+                GameObject roomPrefab = GetValidRoomPrefabForPosition(newGridPosition, theme.roomPrefabs);
+
+                if (roomPrefab == null)
+                {
+                    parent.BlockedDirections.Add(chosenDirection);
+
+                    if (GetAvailableDirections(parent).Count == 0 || parent.Children.Count >= maxChildrenPerRoom)
+                        expandableRooms.Remove(parent);
+
+                    continue;
+                }
+
+                RoomNode newNode = CreateRoom(roomPrefab, newGridPosition, parent, chosenDirection);
+                parent.Children.Add(newNode);
+                generatedInTheme++;
+
+                if (parent.IsStartRoom && startRoomExitCreated)
+                    expandableRooms.Remove(parent);
+                else if (parent.Children.Count >= maxChildrenPerRoom || GetAvailableDirections(parent).Count == 0)
                     expandableRooms.Remove(parent);
 
-                continue;
+                if (GetAvailableDirections(newNode).Count > 0)
+                    expandableRooms.Add(newNode);
             }
-
-            RoomNode newNode = CreateRoom(roomPrefab, newGridPosition, parent, chosenDirection);
-            parent.Children.Add(newNode);
-            generatedNormalRooms++;
-
-            if (parent.IsStartRoom && startRoomExitCreated)
-                expandableRooms.Remove(parent);
-            else if (parent.Children.Count >= maxChildrenPerRoom || GetAvailableDirections(parent).Count == 0)
-                expandableRooms.Remove(parent);
-
-            if (GetAvailableDirections(newNode).Count > 0)
-                expandableRooms.Add(newNode);
         }
 
         ApplyRoomConnections();
@@ -203,11 +215,11 @@ public class RoomManager : MonoBehaviour
         return result;
     }
 
-    private GameObject GetValidRoomPrefabForPosition(Vector2Int targetPosition)
+    private GameObject GetValidRoomPrefabForPosition(Vector2Int targetPosition, GameObject[] currentPrefabs)
     {
         List<GameObject> validPrefabs = new List<GameObject>();
 
-        foreach (GameObject prefab in roomPrefabs)
+        foreach (GameObject prefab in currentPrefabs)
         {
             if (prefab == null)
                 continue;
@@ -351,9 +363,13 @@ public class RoomManager : MonoBehaviour
         return room.RoomObject.transform;
     }
 
-    private void OnDrawGizmos()
+/*    private void OnDrawGizmos()
     {
-        float maxExtent = roomCount * Mathf.Max(roomWidth, roomLength);
+        int totalRooms = 0;
+        foreach (RoomTheme theme in themes)
+            totalRooms += theme.roomCount;
+
+        float maxExtent = totalRooms * Mathf.Max(roomWidth, roomLength);
 
         Vector3 center = transform.position + new Vector3(0f, 1f, maxExtent / 2f);
         Vector3 size = new Vector3(maxExtent * 2f + roomWidth, 3f, maxExtent + roomLength);
@@ -363,7 +379,7 @@ public class RoomManager : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(center, size);
-    }
+    }*/
 
     private class RoomNode
     {
