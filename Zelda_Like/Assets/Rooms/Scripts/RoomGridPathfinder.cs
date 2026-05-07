@@ -175,6 +175,39 @@ public class RoomGridPathfinder : MonoBehaviour
         return transform.position + gridOffset + new Vector3(gridPosition.x * cellSize, 0f, gridPosition.y * cellSize);
     }
 
+    public bool IsWalkableWorld(Vector3 worldPosition)
+    {
+        Vector2Int gridPos = WorldToGrid(worldPosition);
+        return grid[gridPos.x, gridPos.y].walkable;
+    }
+
+    public Vector3 GetNearestWalkableWorld(Vector3 worldPosition)
+    {
+        Vector2Int center = WorldToGrid(worldPosition);
+
+        if (grid[center.x, center.y].walkable)
+            return grid[center.x, center.y].worldPosition;
+
+        for (int radius = 1; radius < Mathf.Max(gridSize.x, gridSize.y); radius++)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    Vector2Int test = center + new Vector2Int(x, y);
+
+                    if (!IsInside(test))
+                        continue;
+
+                    if (grid[test.x, test.y].walkable)
+                        return grid[test.x, test.y].worldPosition;
+                }
+            }
+        }
+
+        return transform.position + gridOffset;
+    }
+
     private bool IsInside(Vector2Int pos)
     {
         return pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
@@ -182,14 +215,14 @@ public class RoomGridPathfinder : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Color.white;
 
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
                 Vector3 pos = Application.isPlaying && grid != null ? grid[x, y].worldPosition : GridToWorld(new Vector2Int(x, y));
-                Gizmos.color = Application.isPlaying && grid != null && !grid[x, y].walkable ? Color.red : Color.green;
+                Gizmos.color = Application.isPlaying && grid != null && !grid[x, y].walkable ? Color.white : Color.white;
                 Gizmos.DrawWireCube(pos, new Vector3(cellSize * 0.9f, 0.1f, cellSize * 0.9f));
             }
         }

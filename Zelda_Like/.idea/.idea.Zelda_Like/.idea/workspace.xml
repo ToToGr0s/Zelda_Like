@@ -5,22 +5,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51b7f0f1-fe4f-4b11-9834-f32a0fa1036b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis/Hunter.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis/Hunter/Hunter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis/Hunter/Hunter.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis/Hunter/Hunter.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemis/Hunter/Hunter.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Zelda_Like/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Zelda_Like/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Materials.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Materials/CartoonLowPolyCityLite_01.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Materials/CartoonLowPolyCityLite_01.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Materials/CartoonLowPolyCityLite_Light.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Materials/CartoonLowPolyCityLite_Light.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Models.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Models/Road_02.fbx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Models/Road_02.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Models/Road_10.fbx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Models/Road_10.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Prefabs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Prefabs/Road_02.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Prefabs/Road_02.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Prefabs/Road_10.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Prefabs/Road_10.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Textures.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Textures/Texture_01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CartoonLowPolyCityLite/Textures/Texture_01.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Enemy/Hunter.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/EnemyContactDamage.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/EnemyContactDamage.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/EnemyGridMover.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/EnemyGridMover.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/Hunter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Enemy/Hunter/Hunter.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemy/Hunter/Hunter.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Enemy/Hunter/Hunter.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Inputs/Zelda_Like.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Inputs/Zelda_Like.inputactions" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Player/Player .prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player/Player .prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Player/Player_Controller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player/Player_Controller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Player/Script/MovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player/Script/MovementController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Player/Script/PlayerHealth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player/Script/PlayerHealth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Player/Script/PlayerInventory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player/Script/PlayerInventory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Prefabs/Foliage/Trees/Spruce 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Prefabs/Foliage/Trees/Spruce 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Prefabs/Foliage/Trees/Spruce 2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Prefabs/Foliage/Trees/Spruce 2.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Terrain/Dirt.terrainlayer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Terrain/Dirt.terrainlayer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Terrain/Sand.terrainlayer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Proxy Games/Stylized Nature Kit Lite/Terrain/Sand.terrainlayer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/RoomParent.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/RoomParent.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 1/Room 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 1/Room 1.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 2/Room 2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 2/Room 2.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 3/Room 3.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 3/Room 3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 3/Room 3.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 3/Room 3/NavMesh-NavMesh Surface.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 3/Room 3/NavMesh-NavMesh Surface.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 4/Room 4.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 4/Room 4.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 5/Room 5.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 5/Room 5.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 6/Room 6.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room 6/Room 6.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Rooms/Room.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomConnections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomConnections.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomGridPathfinder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomGridPathfinder.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Rooms/Scripts/RoomManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scalable Grid Prototype Materials/Materials/Ground/Blue_Ground_Prototype.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scalable Grid Prototype Materials/Materials/Ground/Blue_Ground_Prototype.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Settings/PC_RPAsset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/PC_RPAsset.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Terrain/TerrainData_2e4886d2-23c8-4f33-ad05-9a0d90a602b8.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Terrain/TerrainData_2e4886d2-23c8-4f33-ad05-9a0d90a602b8.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,19 +71,36 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Enemy/EnemyDrop.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Enemy/EnemySpawnZone.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Enemy/Hunter/EnemyShooter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Enemy/RoomEnemySpawner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Item/HealthPickup.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Item/Pushable.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/EnemyKillable.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerDirection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerFight.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerHealth.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerHealthUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerInventory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/PlayerWeapon.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/Restart.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Player/Script/WeaponHUDManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Player/TrueCuller.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomCameraTrigger.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomConnections.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomDoorPoints.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomGridPathfinder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomMarker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Rooms/Scripts/RoomMaterialManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@37e0d4fc2503/Shaders/Terrain/TerrainLit.shader" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -59,7 +116,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Player&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Rooms&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -128,12 +185,19 @@
       <workItem from="1776844110415" duration="12500000" />
       <workItem from="1776945473696" duration="661000" />
       <workItem from="1777289207696" duration="5870000" />
+      <workItem from="1777368835857" duration="2639000" />
+      <workItem from="1777453178968" duration="8191000" />
+      <workItem from="1777538243063" duration="4921000" />
+      <workItem from="1777882021487" duration="6972000" />
+      <workItem from="1777899673452" duration="1143000" />
+      <workItem from="1777983108958" duration="2987000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityProjectDiscoverer">
     <option name="hasUnityReference" value="true" />

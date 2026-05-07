@@ -85,7 +85,7 @@ public class RoomManager : MonoBehaviour
                 }
 
                 Vector2Int newGridPosition = parent.GridPosition + chosenDirection;
-                GameObject roomPrefab = GetValidRoomPrefabForPosition(newGridPosition, theme.roomPrefabs);
+                GameObject roomPrefab = GetValidRoomPrefabForPosition(parent, theme.roomPrefabs);
 
                 if (roomPrefab == null)
                 {
@@ -215,7 +215,7 @@ public class RoomManager : MonoBehaviour
         return result;
     }
 
-    private GameObject GetValidRoomPrefabForPosition(Vector2Int targetPosition, GameObject[] currentPrefabs)
+    private GameObject GetValidRoomPrefabForPosition(RoomNode parent, GameObject[] currentPrefabs)
     {
         List<GameObject> validPrefabs = new List<GameObject>();
 
@@ -224,7 +224,7 @@ public class RoomManager : MonoBehaviour
             if (prefab == null)
                 continue;
 
-            if (IsSamePrefabAdjacent(targetPosition, prefab))
+            if (IsSamePrefabAsParent(parent, prefab))
                 continue;
 
             validPrefabs.Add(prefab);
@@ -236,23 +236,12 @@ public class RoomManager : MonoBehaviour
         return validPrefabs[Random.Range(0, validPrefabs.Count)];
     }
 
-    private bool IsSamePrefabAdjacent(Vector2Int targetPosition, GameObject prefab)
+    private bool IsSamePrefabAsParent(RoomNode parent, GameObject prefab)
     {
-        foreach (Vector2Int dir in directions)
-        {
-            Vector2Int neighborPosition = targetPosition + dir;
+        if (parent == null || parent.RoomObject == null)
+            return false;
 
-            if (!rooms.TryGetValue(neighborPosition, out RoomNode neighbor))
-                continue;
-
-            if (neighbor.RoomObject == null)
-                continue;
-
-            if (neighbor.RoomObject.name.StartsWith(prefab.name))
-                return true;
-        }
-
-        return false;
+        return parent.RoomObject.name.StartsWith(prefab.name);
     }
 
     private bool HasConnection(RoomNode room, Vector2Int direction)
@@ -296,17 +285,21 @@ public class RoomManager : MonoBehaviour
             if (marker == null || marker.type != RoomMarkerType.Locked)
                 continue;
 
+            if (room.Children.Count == 0)
+                continue;
+
+            RoomConnections connections = room.RoomObject.GetComponentInChildren<RoomConnections>(true);
+
+            if (connections == null)
+                continue;
+
             foreach (RoomNode child in room.Children)
             {
                 Vector2Int exitDirection = child.GridPosition - room.GridPosition;
-                RoomConnections connections = room.RoomObject.GetComponentInChildren<RoomConnections>(true);
-
-                if (connections != null)
-                    connections.ApplyLockedDoor(exitDirection);
+                connections.ApplyLockedDoor(exitDirection);
             }
         }
     }
-
     private void PlaceKeyForLockedRoom()
     {
         foreach (RoomNode room in rooms.Values)
@@ -362,24 +355,6 @@ public class RoomManager : MonoBehaviour
 
         return room.RoomObject.transform;
     }
-
-/*    private void OnDrawGizmos()
-    {
-        int totalRooms = 0;
-        foreach (RoomTheme theme in themes)
-            totalRooms += theme.roomCount;
-
-        float maxExtent = totalRooms * Mathf.Max(roomWidth, roomLength);
-
-        Vector3 center = transform.position + new Vector3(0f, 1f, maxExtent / 2f);
-        Vector3 size = new Vector3(maxExtent * 2f + roomWidth, 3f, maxExtent + roomLength);
-
-        Gizmos.color = new Color(0f, 1f, 1f, 0.08f);
-        Gizmos.DrawCube(center, size);
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(center, size);
-    }*/
 
     private class RoomNode
     {

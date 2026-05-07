@@ -1,5 +1,87 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3107223977911880734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7343781517644089944}
+  m_Layer: 0
+  m_Name: EnemyList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7343781517644089944
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3107223977911880734}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 75.54515, y: -51.85089, z: 85.42074}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7386149272277463982}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6977698848335357300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2321565784405208625}
+  - component: {fileID: 1195236222343317409}
+  m_Layer: 0
+  m_Name: RoomGridPathfinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2321565784405208625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6977698848335357300}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -19.5, y: -1, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7386149272277463982}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1195236222343317409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6977698848335357300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8d91c5c4fdacc4c876ca9c9860e0eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomGridPathfinder
+  gridSize: {x: 20, y: 10}
+  cellSize: 2
+  gridOffset: {x: 0.5, y: 0, z: 0}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleCheckRadius: 0.4
 --- !u!1001 &8715166476977090142
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8,13 +90,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 43525412217682762, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 44973847090789977, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 525203176696977942, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
     - target: {fileID: 751529273351051908, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 720ea100b5a5ea741a0e79cfb3ab65c6, type: 2}
+    - target: {fileID: 2721888634140558470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
     - target: {fileID: 2951924980324243470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097924041886377598, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
       objectReference: {fileID: 0}
     - target: {fileID: 4102448583707551560, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: fillColor.a
@@ -43,6 +145,14 @@ PrefabInstance:
     - target: {fileID: 4102448583707551560, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: wireColor.r
       value: 0.100045204
+      objectReference: {fileID: 0}
+    - target: {fileID: 4324098246032362952, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867642893038130547, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
       objectReference: {fileID: 0}
     - target: {fileID: 4987919228279096151, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -88,21 +198,154 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 720ea100b5a5ea741a0e79cfb3ab65c6, type: 2}
+    - target: {fileID: 5846012456045314164, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 6023327692885450022, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 6203169930921064633, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
     - target: {fileID: 6307859702630052254, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 720ea100b5a5ea741a0e79cfb3ab65c6, type: 2}
+    - target: {fileID: 6669672550338460247, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 6684445074933094050, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825008105269119332, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8238399958843110384, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
     - target: {fileID: 8330529638106299054, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_Name
       value: Room 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8330529638106299054, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450554537398513135, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
       objectReference: {fileID: 0}
     - target: {fileID: 8609123662040711432, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 720ea100b5a5ea741a0e79cfb3ab65c6, type: 2}
+    - target: {fileID: 8909835566696526177, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218935129094951550, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      propertyPath: m_TagString
+      value: Obstacles
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7042497165282607051, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2193994215305190896, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 2321565784405208625}
+    - targetCorrespondingSourceObject: {fileID: 2193994215305190896, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7343781517644089944}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8330529638106299054, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3100050126882426041}
+    - targetCorrespondingSourceObject: {fileID: 8330529638106299054, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6089155601340359377}
+    - targetCorrespondingSourceObject: {fileID: 2951924980324243470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9217778137780001353}
   m_SourcePrefab: {fileID: 100100000, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+--- !u!1 &822330441484522736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8330529638106299054, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+  m_PrefabInstance: {fileID: 8715166476977090142}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3100050126882426041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822330441484522736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d425f6e4fb192f143922ae8723477186, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnZone
+  zoneSize: {x: 20, y: 1, z: 15}
+  zoneOffset: {x: 0, y: 0, z: 0}
+  spawnY: 0
+  gizmoFillColor: {r: 0, g: 0.93945074, b: 1, a: 0.2}
+  gizmoWireColor: {r: 0, g: 0.6256571, b: 1, a: 1}
+--- !u!114 &6089155601340359377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822330441484522736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd866adf8613ab4f89faee206d944fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomEnemySpawner
+  spawnZone: {fileID: 3100050126882426041}
+  enemyPrefabs:
+  - {fileID: 5165741608553898875, guid: 76042b7326b057047b72514b1c90d246, type: 3}
+  - {fileID: 5165741608553898875, guid: 76042b7326b057047b72514b1c90d246, type: 3}
+  parentForSpawnedEnemies: {fileID: 7343781517644089944}
+  roomGridPathfinder: {fileID: 1195236222343317409}
+  roomTrigger: {fileID: 9217778137780001353}
+  minEnemyCount: 20
+  maxEnemyCount: 14
+--- !u!1 &5766056255454492240 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2951924980324243470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+  m_PrefabInstance: {fileID: 8715166476977090142}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &9217778137780001353
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5766056255454492240}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 40, y: 5, z: 20}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &7386149272277463982 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2193994215305190896, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
+  m_PrefabInstance: {fileID: 8715166476977090142}
+  m_PrefabAsset: {fileID: 0}

@@ -1,7 +1,5 @@
-using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -35,6 +33,17 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void Heal(int amount)
+    {
+        if (isDead)
+            return;
+
+        currentHealth += amount;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+    }
+
     public int GetCurrentHealth()
     {
         return currentHealth;
@@ -50,6 +59,30 @@ public class PlayerHealth : MonoBehaviour
         return isDead;
     }
 
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        isDead = false;
+
+        if (playerInput != null)
+            playerInput.ActivateInput();
+
+        if (deathPanel != null)
+            deathPanel.SetActive(false);
+    }
+
+    public void FullReset()
+    {
+        currentHealth = maxHealth;
+        isDead = false;
+
+        if (playerInput != null)
+            playerInput.ActivateInput();
+
+        if (deathPanel != null)
+            deathPanel.SetActive(false);
+    }
+
     private void Die()
     {
         isDead = true;
@@ -59,10 +92,5 @@ public class PlayerHealth : MonoBehaviour
 
         if (deathPanel != null)
             deathPanel.SetActive(true);
-    }
-    
-    public void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -2,7 +2,47 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    [Header("Key")]
     public bool hasKey;
+
+    [Header("Weapons")]
+    [SerializeField] private Transform weaponHolder;
+    [SerializeField] private GameObject[] weaponPrefabs;
+    [SerializeField] private int currentWeaponIndex;
+
+    private GameObject currentWeaponInstance;
+
+    private void Start()
+    {
+        SpawnCurrentWeapon();
+    }
+
+    public void EquipWeapon(int index)
+    {
+        if (weaponPrefabs == null || weaponPrefabs.Length == 0) return;
+        if (index < 0 || index >= weaponPrefabs.Length) return;
+
+        currentWeaponIndex = index;
+        SpawnCurrentWeapon();
+    }
+
+    private void SpawnCurrentWeapon()
+    {
+        if (weaponHolder == null) return;
+        if (weaponPrefabs == null || weaponPrefabs.Length == 0) return;
+
+        if (currentWeaponInstance != null)
+            Destroy(currentWeaponInstance);
+
+        currentWeaponInstance = Instantiate(weaponPrefabs[currentWeaponIndex], weaponHolder);
+        currentWeaponInstance.transform.localPosition = Vector3.zero;
+        currentWeaponInstance.transform.localRotation = Quaternion.identity;
+    }
+
+    public GameObject GetCurrentWeapon()
+    {
+        return currentWeaponInstance;
+    }
 
     public void AddKey()
     {
