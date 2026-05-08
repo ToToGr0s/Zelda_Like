@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ZeldaLike": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "h7q8019VLCg=",
+  "success": true,
+  "projectFilePath": "C:\\GIT\\Zelda_Like\\Zelda_Like\\ZeldaLike\\ZeldaLike\\ZeldaLike.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\theoc\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.23.0\\microsoft.visualstudio.azure.containers.tools.targets.1.23.0.nupkg.sha512"
+  ],
+  "logs": []
+}
