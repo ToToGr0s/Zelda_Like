@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RangedWeapon : MonoBehaviour
+public class RangedWeapon : PlayerWeapon
 {
     [Header("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
@@ -23,10 +23,14 @@ public class RangedWeapon : MonoBehaviour
     [SerializeField] private Vector3 rightRotation;
 
     private MovementController movementController;
+    private PlayerBonusManager bonusManager;
+    private Vector3 lastAppliedDirection;
+    private bool hasAppliedDirection;
 
     private void Awake()
     {
         movementController = GetComponentInParent<MovementController>();
+        bonusManager = GetComponentInParent<PlayerBonusManager>();
     }
 
     private void Update()
@@ -34,35 +38,42 @@ public class RangedWeapon : MonoBehaviour
         UpdateWeaponTransform();
     }
 
-    public void Use()
+    public override void Use()
     {
-        if (projectilePrefab == null) return;
-        if (firePoint == null) return;
-        if (movementController == null) return;
+        if (projectilePrefab == null || firePoint == null || movementController == null)
+            return;
 
-        if (Time.time < lastFireTime + fireCooldown) return;
+        if (Time.time < lastFireTime + fireCooldown)
+            return;
 
         lastFireTime = Time.time;
 
+        int damage = Mathf.RoundToInt(bonusManager != null ? bonusManager.DamageMultiplier : 1f);
         Vector3 direction = movementController.GetLastLookDirection();
         Vector3 spawnPosition = firePoint.position + direction * projectileSpawnOffset;
-
         GameObject projectileObject = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
         Projectile projectile = projectileObject.GetComponent<Projectile>();
 
-        if (projectile == null) return;
+        if (projectile == null)
+            return;
 
-        projectile.Init(direction, projectileSpeed);
+        projectile.Init(direction, projectileSpeed, damage);
     }
 
     private void UpdateWeaponTransform()
     {
-        if (movementController == null) return;
+        if (movementController == null)
+            return;
 
         Vector3 direction = movementController.GetLastLookDirection();
 
-        transform.localPosition = GetLocalPositionFromDirection(direction);
+        if (hasAppliedDirection && direction == lastAppliedDirection)
+            return;
+
+        transform.localPosition = GetLocalPositionFromDirection(direction); // OPTIMIZED: only recalculate weapon placement when the look direction changes.
         transform.localRotation = Quaternion.Euler(GetLocalRotationFromDirection(direction));
+        lastAppliedDirection = direction;
+        hasAppliedDirection = true;
     }
 
     private Vector3 GetLocalPositionFromDirection(Vector3 direction)

@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class MeleeWeapon : MonoBehaviour
+public class MeleeWeapon : PlayerWeapon
 {
+    private const string PlayerTag = "Player";
+
     [Header("Hitbox")]
     [SerializeField] private BoxCollider hitbox;
     [SerializeField] private Transform hitboxTransform;
@@ -31,10 +33,14 @@ public class MeleeWeapon : MonoBehaviour
     [SerializeField] private Vector3 hitboxRightRotation;
 
     private MovementController movementController;
+    private PlayerBonusManager bonusManager;
+    private Vector3 lastAppliedDirection;
+    private bool hasAppliedDirection;
 
     private void Awake()
     {
         movementController = GetComponentInParent<MovementController>();
+        bonusManager = GetComponentInParent<PlayerBonusManager>(); // OPTIMIZED: cache bonus manager instead of resolving it on every swing.
 
         if (hitboxTransform == null && hitbox != null)
             hitboxTransform = hitbox.transform;
@@ -45,43 +51,56 @@ public class MeleeWeapon : MonoBehaviour
         UpdateWeaponTransform();
     }
 
-    public void Use()
+    public override void Use()
     {
         KillEnemiesInsideHitbox();
     }
 
     private void KillEnemiesInsideHitbox()
     {
-        if (hitbox == null) return;
-        if (hitboxTransform == null) return;
+        if (hitbox == null || hitboxTransform == null)
+            return;
 
         Vector3 center = hitboxTransform.TransformPoint(hitbox.center);
         Vector3 halfExtents = Vector3.Scale(hitbox.size * 0.5f, hitboxTransform.lossyScale);
         Quaternion rotation = hitboxTransform.rotation;
-
         Collider[] hits = Physics.OverlapBox(center, halfExtents, rotation);
+        int damage = Mathf.RoundToInt(bonusManager != null ? bonusManager.DamageMultiplier : 1f);
 
         for (int i = 0; i < hits.Length; i++)
         {
             Collider current = hits[i];
 
-            if (current.transform.root.CompareTag("Player"))
+            if (current.transform.root.CompareTag(PlayerTag))
                 continue;
 
             EnemyKillable enemy = current.GetComponentInParent<EnemyKillable>();
 
             if (enemy != null)
+            {
                 enemy.Kill();
+                SoundManager.Instance?.PlaySFX(SoundManager.Instance.enemyDeath);
+                continue;
+            }
+
+            BossDamageable boss = current.GetComponentInParent<BossDamageable>();
+
+            if (boss != null)
+                boss.TakeDamage(damage);
         }
     }
 
     private void UpdateWeaponTransform()
     {
-        if (movementController == null) return;
+        if (movementController == null)
+            return;
 
         Vector3 direction = movementController.GetLastLookDirection();
 
-        transform.localPosition = GetWeaponLocalPosition(direction);
+        if (hasAppliedDirection && direction == lastAppliedDirection)
+            return;
+
+        transform.localPosition = GetWeaponLocalPosition(direction); // OPTIMIZED: only update weapon placement when the facing direction changes.
         transform.localRotation = Quaternion.Euler(GetWeaponLocalRotation(direction));
 
         if (hitboxTransform != null)
@@ -89,6 +108,9 @@ public class MeleeWeapon : MonoBehaviour
             hitboxTransform.localPosition = GetHitboxLocalPosition(direction);
             hitboxTransform.localRotation = Quaternion.Euler(GetHitboxLocalRotation(direction));
         }
+
+        lastAppliedDirection = direction;
+        hasAppliedDirection = true;
     }
 
     private Vector3 GetWeaponLocalPosition(Vector3 direction)
