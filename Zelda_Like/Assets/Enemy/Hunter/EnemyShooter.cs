@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class EnemyShooter : MonoBehaviour
 {
-    [SerializeField] private string playerTag = "Player";
+    private const string DefaultPlayerTag = "Player";
+
+    [SerializeField] private string playerTag = DefaultPlayerTag;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float shootRange = 6f;
@@ -14,6 +16,17 @@ public class EnemyShooter : MonoBehaviour
 
     private Transform target;
     private float nextShootTime;
+    private float shootRangeSqr;
+
+    private void Awake()
+    {
+        CacheShootRange();
+    }
+
+    private void OnValidate()
+    {
+        CacheShootRange();
+    }
 
     private void Start()
     {
@@ -28,9 +41,7 @@ public class EnemyShooter : MonoBehaviour
         if (target == null || projectilePrefab == null || firePoint == null)
             return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-
-        if (distanceToPlayer > shootRange)
+        if ((target.position - transform.position).sqrMagnitude > shootRangeSqr)
             return;
 
         if (Time.time < nextShootTime)
@@ -44,14 +55,13 @@ public class EnemyShooter : MonoBehaviour
     {
         Vector3 direction = GetCardinalDirection(firePoint.position, target.position);
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(direction));
-
         EnemyProjectile enemyProjectile = projectile.GetComponent<EnemyProjectile>();
 
         if (enemyProjectile != null)
             enemyProjectile.SetDirection(direction);
     }
 
-    private Vector3 GetCardinalDirection(Vector3 from, Vector3 to)
+    private static Vector3 GetCardinalDirection(Vector3 from, Vector3 to)
     {
         Vector3 direction = to - from;
         direction.y = 0f;
@@ -60,6 +70,11 @@ public class EnemyShooter : MonoBehaviour
             return direction.x > 0f ? Vector3.right : Vector3.left;
 
         return direction.z > 0f ? Vector3.forward : Vector3.back;
+    }
+
+    private void CacheShootRange()
+    {
+        shootRangeSqr = shootRange * shootRange;
     }
 
     private void OnDrawGizmosSelected()

@@ -160,7 +160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4987919228279096151, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4987919228279096151, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -316,8 +316,8 @@ MonoBehaviour:
   parentForSpawnedEnemies: {fileID: 7343781517644089944}
   roomGridPathfinder: {fileID: 1195236222343317409}
   roomTrigger: {fileID: 9217778137780001353}
-  minEnemyCount: 20
-  maxEnemyCount: 14
+  minEnemyCount: 3
+  maxEnemyCount: 9
 --- !u!1 &5766056255454492240 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2951924980324243470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}

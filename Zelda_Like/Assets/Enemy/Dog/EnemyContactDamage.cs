@@ -2,26 +2,49 @@ using UnityEngine;
 
 public class EnemyContactDamage : MonoBehaviour
 {
-    [SerializeField] private string playerTag = "Player";
+    private const string DefaultPlayerTag = "Player";
+
+    [SerializeField] private string playerTag = DefaultPlayerTag;
     [SerializeField] private int damage = 1;
     [SerializeField] private float damageCooldown = 1f;
 
     private float nextDamageTime;
+    private Collider cachedPlayerCollider;
+    private PlayerHealth cachedPlayerHealth;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag(playerTag))
             return;
 
-        if (Time.time < nextDamageTime)
+        cachedPlayerCollider = other;
+        cachedPlayerHealth = other.GetComponent<PlayerHealth>(); // OPTIMIZED: cache the player health reference once per contact.
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!other.CompareTag(playerTag) || Time.time < nextDamageTime)
             return;
 
-        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+        if (cachedPlayerCollider != other)
+        {
+            cachedPlayerCollider = other;
+            cachedPlayerHealth = other.GetComponent<PlayerHealth>(); // OPTIMIZED: refresh the cache only when the collider changes.
+        }
 
-        if (playerHealth == null)
+        if (cachedPlayerHealth == null)
             return;
 
-        playerHealth.TakeDamage(damage);
+        cachedPlayerHealth.TakeDamage(damage);
         nextDamageTime = Time.time + damageCooldown;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (cachedPlayerCollider != other)
+            return;
+
+        cachedPlayerCollider = null;
+        cachedPlayerHealth = null;
     }
 }

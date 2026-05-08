@@ -63,7 +63,7 @@ Transform:
   m_GameObject: {fileID: 5165741608553898875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.7852, y: -0.02, z: 27.78065}
+  m_LocalPosition: {x: -7.7852, y: 0.5, z: 27.78065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -230,6 +230,10 @@ MonoBehaviour:
   dropPrefab: {fileID: 8910036627261506511, guid: f31007946ffc7024196e167c74fa12cb, type: 3}
   dropPoint: {fileID: 6862989972793266247}
   dropChance: 0.2
+  coinPrefab: {fileID: 0}
+  coinDropChance: 0.5
+  minCoins: 1
+  maxCoins: 3
 --- !u!114 &6171481795272390501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +249,10 @@ MonoBehaviour:
   dropPrefab: {fileID: 0}
   dropPoint: {fileID: 6862989972793266247}
   dropChance: 0.45
+  coinPrefab: {fileID: 4709706171910062323, guid: c9b863decbd2e834b9ca14c5b45f5cbd, type: 3}
+  coinDropChance: 0.33
+  minCoins: 1
+  maxCoins: 3
 --- !u!1 &8989854718541131834
 GameObject:
   m_ObjectHideFlags: 0

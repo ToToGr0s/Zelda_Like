@@ -4,7 +4,7 @@ public class EnemySpawnZone : MonoBehaviour
 {
     [SerializeField] private Vector3 zoneSize = new Vector3(10f, 1f, 10f);
     [SerializeField] private Vector3 zoneOffset = Vector3.zero;
-    [SerializeField] private float spawnY = 0f;
+    [SerializeField] private float spawnY = 0.5f;
     [SerializeField] private Color gizmoFillColor = new Color(1f, 0f, 0f, 0.2f);
     [SerializeField] private Color gizmoWireColor = Color.red;
 

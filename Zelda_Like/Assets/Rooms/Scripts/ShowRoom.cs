@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ShowRoom : MonoBehaviour
 {
+    private const string PlayerTag = "Player";
+
     [SerializeField] private GameObject prefabToToggle;
 
     public GameObject GetContentParent()
@@ -11,7 +13,7 @@ public class ShowRoom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (!other.CompareTag(PlayerTag))
             return;
 
         if (prefabToToggle != null)
@@ -20,7 +22,7 @@ public class ShowRoom : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (!other.CompareTag(PlayerTag))
             return;
 
         if (prefabToToggle != null)

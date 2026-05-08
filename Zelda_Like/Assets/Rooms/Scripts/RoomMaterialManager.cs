@@ -13,6 +13,12 @@ public class RoomMaterialManager : MonoBehaviour
     [SerializeField] private Material cornerDownRightMaterial;
     [SerializeField] private Material cornerDownLeftMaterial;
 
+    private void Awake()
+    {
+        if (targetRenderer == null)
+            targetRenderer = GetComponent<Renderer>(); // OPTIMIZED: cache local renderer fallback once.
+    }
+
     public void ApplyFromConnections(bool openLeft, bool openRight, bool openTop, bool openBottom)
     {
         if (targetRenderer == null)

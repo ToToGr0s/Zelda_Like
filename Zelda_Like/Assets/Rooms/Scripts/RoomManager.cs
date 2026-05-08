@@ -43,7 +43,24 @@ public class RoomManager : MonoBehaviour
 
     private void Start()
     {
+        ApplyRoomCountFromMenu();
         GenerateDungeon();
+    }
+
+    private void ApplyRoomCountFromMenu()
+    {
+        int selectedCount = MainMenu.SelectedRoomCount;
+
+        if (themes != null && themes.Length > 0)
+        {
+            int perTheme = selectedCount / themes.Length;
+            int remainder = selectedCount % themes.Length;
+
+            for (int i = 0; i < themes.Length; i++)
+            {
+                themes[i].roomCount = perTheme + (i < remainder ? 1 : 0);
+            }
+        }
     }
 
     public void GenerateDungeon()
@@ -115,6 +132,8 @@ public class RoomManager : MonoBehaviour
         ApplyLockedDoorOnLockedRoom();
         PlaceKeyForLockedRoom();
         PlacePushableOnPushableRoom();
+
+        SoundManager.Instance?.PlayMusic(SoundManager.Instance.dungeonMusic);
 
         Debug.Log("Dungeon generated with " + rooms.Count + " rooms.");
     }

@@ -1515,13 +1515,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8330529638106299054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bd42701f11e90f43802339ee7131108, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ef9c1e1bc741334f9df3f5b5f46deda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TreeCuller
   terrain: {fileID: 0}
-  cullBox: {x: 42, y: 10, z: 21}
-  cullOffset: {x: 0, y: 2, z: 0}
-  gizmoFillColor: {r: 1, g: 1, b: 1, a: 0.03137255}
+  cullBox: {x: 42, y: 3, z: 21}
+  cullOffset: {x: 0, y: 0, z: 0}
+  gizmoFillColor: {r: 1, g: 1, b: 1, a: 0.3}
   gizmoWireColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &4584106304266214382
 MonoBehaviour:

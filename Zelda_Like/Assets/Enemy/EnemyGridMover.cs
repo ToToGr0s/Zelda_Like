@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class EnemyGridMover : MonoBehaviour
 {
+    private const string DefaultPlayerTag = "Player";
+
     [SerializeField] private RoomGridPathfinder pathfinder;
-    [SerializeField] private string playerTag = "Player";
+    [SerializeField] private string playerTag = DefaultPlayerTag;
     [SerializeField] private float farChaseSpeed = 4f;
     [SerializeField] private float nearChaseSpeed = 2f;
     [SerializeField] private float farRange = 12f;
@@ -47,20 +49,30 @@ public class EnemyGridMover : MonoBehaviour
     private Rigidbody rb;
 
     private Vector3 patrolOrigin;
-    private List<Vector3> patrolPoints = new List<Vector3>();
+    private readonly List<Vector3> patrolPoints = new();
     private int patrolPointIndex;
     private float patrolWaitTimer;
     private Vector3 currentPatrolCenter;
     private float currentPatrolWidth;
     private float currentPatrolHeight;
+    private float farRangeSqr;
+    private float nearRangeSqr;
+    private float stopDistanceSqr;
+    private float reachDistanceSqr;
 
     private void Awake()
     {
         initialRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
+        CacheDistanceSquares();
 
         if (rb != null && lockRotation)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+
+    private void OnValidate()
+    {
+        CacheDistanceSquares();
     }
 
     private void Start()
@@ -71,20 +83,21 @@ public class EnemyGridMover : MonoBehaviour
             target = playerObject.transform;
 
         if (pathfinder == null)
-            pathfinder = GetComponentInParent<RoomGridPathfinder>();
+            pathfinder = GetComponentInParent<RoomGridPathfinder>(); // OPTIMIZED: resolve the parent pathfinder once.
 
         if (roomTrigger == null)
-            roomTrigger = GetComponentInParent<Collider>();
+            roomTrigger = GetComponentInParent<Collider>(); // OPTIMIZED: resolve the room trigger once.
 
         patrolOrigin = transform.position;
         GenerateNewPatrolRoute();
-        
     }
+
     public void Init(RoomGridPathfinder pathfinder, Collider roomTrigger)
     {
         this.pathfinder = pathfinder;
         this.roomTrigger = roomTrigger;
     }
+
     private void LateUpdate()
     {
         if (lockRotation)
@@ -104,57 +117,45 @@ public class EnemyGridMover : MonoBehaviour
 
         if (!roomTrigger.bounds.Contains(target.position))
         {
-            currentPath = null;
-            currentIndex = 0;
+            ClearCurrentPath();
             HandlePatrol();
             return;
         }
 
-        float distanceToPlayer = Vector3.Distance(transform.position, target.position);
+        Vector3 currentPosition = transform.position;
+        float distanceToPlayerSqr = (target.position - currentPosition).sqrMagnitude;
 
-        if (distanceToPlayer <= stopDistance)
+        if (distanceToPlayerSqr <= stopDistanceSqr)
         {
-            currentPath = null;
-            currentIndex = 0;
+            ClearCurrentPath();
             return;
         }
 
-        if (distanceToPlayer > farRange)
+        if (distanceToPlayerSqr > farRangeSqr)
         {
-            currentPath = null;
-            currentIndex = 0;
+            ClearCurrentPath();
             HandlePatrol();
             return;
         }
 
         patrolWaitTimer = 0f;
-
-        float currentSpeed = distanceToPlayer <= nearRange ? nearChaseSpeed : farChaseSpeed;
+        float currentSpeed = distanceToPlayerSqr <= nearRangeSqr ? nearChaseSpeed : farChaseSpeed;
 
         repathTimer -= Time.deltaTime;
 
         if (repathTimer <= 0f)
         {
-            currentPath = pathfinder.FindPath(transform.position, target.position);
+            currentPath = pathfinder.FindPath(currentPosition, target.position);
             currentIndex = 0;
             repathTimer = repathInterval;
         }
 
-        if (currentPath == null || currentPath.Count == 0 || currentIndex >= currentPath.Count)
-            return;
-
-        Vector3 nextPoint = currentPath[currentIndex];
-        Vector3 moveTarget = new Vector3(nextPoint.x, transform.position.y, nextPoint.z);
-
-        transform.position = Vector3.MoveTowards(transform.position, moveTarget, currentSpeed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, moveTarget) <= reachDistance)
-            currentIndex++;
+        MoveAlongCurrentPath(currentSpeed);
     }
 
     private void HandlePatrol()
     {
-        if (patrolPoints == null || patrolPoints.Count == 0)
+        if (patrolPoints.Count == 0)
             GenerateNewPatrolRoute();
 
         if (patrolWaitTimer > 0f)
@@ -163,7 +164,7 @@ public class EnemyGridMover : MonoBehaviour
             return;
         }
 
-        if (currentPath == null || currentPath.Count == 0 || currentIndex >= currentPath.Count)
+        if (!HasActivePath())
         {
             if (patrolPointIndex >= patrolPoints.Count)
             {
@@ -189,54 +190,42 @@ public class EnemyGridMover : MonoBehaviour
             return;
         }
 
-        Vector3 nextPoint = currentPath[currentIndex];
-        Vector3 moveTarget = new Vector3(nextPoint.x, transform.position.y, nextPoint.z);
+        if (!MoveAlongCurrentPath(patrolSpeed))
+            return;
 
-        transform.position = Vector3.MoveTowards(transform.position, moveTarget, patrolSpeed * Time.deltaTime);
+        ClearCurrentPath();
+        patrolPointIndex++;
 
-        if (Vector3.Distance(transform.position, moveTarget) <= reachDistance)
-            currentIndex++;
-
-        if (currentIndex >= currentPath.Count)
+        if (patrolPointIndex >= patrolPoints.Count)
         {
-            currentPath = null;
-            currentIndex = 0;
-            patrolPointIndex++;
-            patrolWaitTimer = patrolPointWaitTime;
+            GenerateNewPatrolRoute();
+            patrolWaitTimer = patrolLoopWaitTime;
+            return;
         }
+
+        patrolWaitTimer = patrolPointWaitTime;
     }
 
     private void GenerateNewPatrolRoute()
     {
         patrolPoints.Clear();
         patrolPointIndex = 0;
-        currentPath = null;
-        currentIndex = 0;
+        ClearCurrentPath();
 
         float width = Random.Range(minPatrolWidth, maxPatrolWidth);
         float height = forcePerfectSquare ? width : Random.Range(minPatrolHeight, maxPatrolHeight);
-
         Vector3 centerOffset = new Vector3(
             Random.Range(-maxPatrolOffsetX, maxPatrolOffsetX),
             0f,
-            Random.Range(-maxPatrolOffsetZ, maxPatrolOffsetZ)
-        );
-
+            Random.Range(-maxPatrolOffsetZ, maxPatrolOffsetZ));
         Vector3 center = patrolOrigin + centerOffset;
 
-        Vector3 topLeft = center + new Vector3(-width * 0.5f, 0f, height * 0.5f);
-        Vector3 topRight = center + new Vector3(width * 0.5f, 0f, height * 0.5f);
-        Vector3 bottomRight = center + new Vector3(width * 0.5f, 0f, -height * 0.5f);
-        Vector3 bottomLeft = center + new Vector3(-width * 0.5f, 0f, -height * 0.5f);
+        Vector3 topLeft = pathfinder.GetNearestWalkableWorld(center + new Vector3(-width * 0.5f, 0f, height * 0.5f));
+        Vector3 topRight = pathfinder.GetNearestWalkableWorld(center + new Vector3(width * 0.5f, 0f, height * 0.5f));
+        Vector3 bottomRight = pathfinder.GetNearestWalkableWorld(center + new Vector3(width * 0.5f, 0f, -height * 0.5f));
+        Vector3 bottomLeft = pathfinder.GetNearestWalkableWorld(center + new Vector3(-width * 0.5f, 0f, -height * 0.5f));
 
-        topLeft = pathfinder.GetNearestWalkableWorld(topLeft);
-        topRight = pathfinder.GetNearestWalkableWorld(topRight);
-        bottomRight = pathfinder.GetNearestWalkableWorld(bottomRight);
-        bottomLeft = pathfinder.GetNearestWalkableWorld(bottomLeft);
-
-        bool clockwise = randomizePatrolDirection ? Random.value > 0.5f : true;
-
-        if (clockwise)
+        if (randomizePatrolDirection ? Random.value > 0.5f : true)
         {
             patrolPoints.Add(topLeft);
             patrolPoints.Add(topRight);
@@ -254,6 +243,42 @@ public class EnemyGridMover : MonoBehaviour
         currentPatrolCenter = center;
         currentPatrolWidth = width;
         currentPatrolHeight = height;
+    }
+
+    private bool MoveAlongCurrentPath(float moveSpeed)
+    {
+        if (!HasActivePath())
+            return false;
+
+        Vector3 position = transform.position;
+        Vector3 nextPoint = currentPath[currentIndex];
+        Vector3 moveTarget = new Vector3(nextPoint.x, position.y, nextPoint.z);
+        transform.position = Vector3.MoveTowards(position, moveTarget, moveSpeed * Time.deltaTime); // OPTIMIZED: shared path movement logic avoids duplicated work.
+
+        if ((transform.position - moveTarget).sqrMagnitude > reachDistanceSqr)
+            return false;
+
+        currentIndex++;
+        return currentIndex >= currentPath.Count;
+    }
+
+    private bool HasActivePath()
+    {
+        return currentPath != null && currentPath.Count > 0 && currentIndex < currentPath.Count;
+    }
+
+    private void ClearCurrentPath()
+    {
+        currentPath = null;
+        currentIndex = 0;
+    }
+
+    private void CacheDistanceSquares()
+    {
+        farRangeSqr = farRange * farRange;
+        nearRangeSqr = nearRange * nearRange;
+        stopDistanceSqr = stopDistance * stopDistance;
+        reachDistanceSqr = reachDistance * reachDistance;
     }
 
     private void DrawZone(Vector3 center, float range, Color fillColor, Color wireColor)

@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class DoorWithKey : MonoBehaviour
+public class CoinPickup : MonoBehaviour
 {
     private const string PlayerTag = "Player";
+
+    [SerializeField] private int coinValue = 1;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -11,9 +13,11 @@ public class DoorWithKey : MonoBehaviour
 
         PlayerInventory inventory = other.GetComponent<PlayerInventory>();
 
-        if (inventory == null || !inventory.UseKey())
+        if (inventory == null)
             return;
 
-        gameObject.SetActive(false);
+        inventory.AddCoins(coinValue);
+        SoundManager.Instance?.PlaySFX(SoundManager.Instance.coinPickup);
+        Destroy(gameObject);
     }
 }

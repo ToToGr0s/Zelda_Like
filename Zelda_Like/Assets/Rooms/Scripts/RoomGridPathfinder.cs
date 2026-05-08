@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class RoomGridPathfinder : MonoBehaviour
 {
+    private static readonly Vector2Int[] CardinalDirections =
+    {
+        Vector2Int.up,
+        Vector2Int.down,
+        Vector2Int.left,
+        Vector2Int.right
+    };
+
     [SerializeField] private Vector2Int gridSize = new Vector2Int(20, 20);
     [SerializeField] private float cellSize = 2f;
     [SerializeField] private Vector3 gridOffset;
@@ -10,6 +18,9 @@ public class RoomGridPathfinder : MonoBehaviour
     [SerializeField] private float obstacleCheckRadius = 0.4f;
 
     private Node[,] grid;
+    private readonly List<Node> openList = new();
+    private readonly HashSet<Node> closedList = new();
+    private readonly List<Node> retraceBuffer = new();
 
     private void Awake()
     {
@@ -19,12 +30,13 @@ public class RoomGridPathfinder : MonoBehaviour
     public void BuildGrid()
     {
         grid = new Node[gridSize.x, gridSize.y];
+        Vector3 origin = transform.position + gridOffset;
 
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
-                Vector3 worldPos = GridToWorld(new Vector2Int(x, y));
+                Vector3 worldPos = origin + new Vector3(x * cellSize, 0f, y * cellSize);
                 bool walkable = !Physics.CheckSphere(worldPos, obstacleCheckRadius, obstacleMask);
                 grid[x, y] = new Node(new Vector2Int(x, y), walkable, worldPos);
             }
@@ -33,6 +45,9 @@ public class RoomGridPathfinder : MonoBehaviour
 
     public List<Vector3> FindPath(Vector3 startWorld, Vector3 targetWorld)
     {
+        if (grid == null || grid.GetLength(0) != gridSize.x || grid.GetLength(1) != gridSize.y)
+            BuildGrid();
+
         Vector2Int startGrid = WorldToGrid(startWorld);
         Vector2Int targetGrid = WorldToGrid(targetWorld);
 
@@ -45,43 +60,55 @@ public class RoomGridPathfinder : MonoBehaviour
         if (!startNode.walkable || !targetNode.walkable)
             return null;
 
-        List<Node> openList = new List<Node>();
-        HashSet<Node> closedList = new HashSet<Node>();
-
         ResetGrid();
-
+        openList.Clear(); // OPTIMIZED: reuse pathfinding collections instead of reallocating them every call.
+        closedList.Clear(); // OPTIMIZED: reuse pathfinding collections instead of reallocating them every call.
         openList.Add(startNode);
 
         while (openList.Count > 0)
         {
+            int currentIndex = 0;
             Node current = openList[0];
 
             for (int i = 1; i < openList.Count; i++)
             {
-                if (openList[i].fCost < current.fCost || openList[i].fCost == current.fCost && openList[i].hCost < current.hCost)
-                    current = openList[i];
+                Node candidate = openList[i];
+
+                if (candidate.fCost < current.fCost || candidate.fCost == current.fCost && candidate.hCost < current.hCost)
+                {
+                    current = candidate;
+                    currentIndex = i;
+                }
             }
 
-            openList.Remove(current);
+            openList.RemoveAt(currentIndex);
             closedList.Add(current);
 
             if (current == targetNode)
                 return RetracePath(startNode, targetNode);
 
-            foreach (Node neighbor in GetNeighbors(current))
+            for (int i = 0; i < CardinalDirections.Length; i++)
             {
+                Vector2Int next = current.gridPosition + CardinalDirections[i];
+
+                if (!IsInside(next))
+                    continue;
+
+                Node neighbor = grid[next.x, next.y];
+
                 if (!neighbor.walkable || closedList.Contains(neighbor))
                     continue;
 
                 int newCost = current.gCost + 10;
+                bool isInOpenList = openList.Contains(neighbor);
 
-                if (newCost < neighbor.gCost || !openList.Contains(neighbor))
+                if (newCost < neighbor.gCost || !isInOpenList)
                 {
                     neighbor.gCost = newCost;
                     neighbor.hCost = GetDistance(neighbor, targetNode);
                     neighbor.parent = current;
 
-                    if (!openList.Contains(neighbor))
+                    if (!isInOpenList)
                         openList.Add(neighbor);
                 }
             }
@@ -105,49 +132,25 @@ public class RoomGridPathfinder : MonoBehaviour
 
     private List<Vector3> RetracePath(Node startNode, Node endNode)
     {
-        List<Node> path = new List<Node>();
+        retraceBuffer.Clear();
         Node current = endNode;
 
         while (current != startNode)
         {
-            path.Add(current);
+            retraceBuffer.Add(current);
             current = current.parent;
 
             if (current == null)
                 return null;
         }
 
-        path.Reverse();
+        retraceBuffer.Reverse();
+        List<Vector3> worldPath = new List<Vector3>(retraceBuffer.Count);
 
-        List<Vector3> worldPath = new List<Vector3>();
-
-        for (int i = 0; i < path.Count; i++)
-            worldPath.Add(path[i].worldPosition);
+        for (int i = 0; i < retraceBuffer.Count; i++)
+            worldPath.Add(retraceBuffer[i].worldPosition);
 
         return worldPath;
-    }
-
-    private List<Node> GetNeighbors(Node node)
-    {
-        List<Node> neighbors = new List<Node>();
-
-        Vector2Int[] directions =
-        {
-            Vector2Int.up,
-            Vector2Int.down,
-            Vector2Int.left,
-            Vector2Int.right
-        };
-
-        for (int i = 0; i < directions.Length; i++)
-        {
-            Vector2Int next = node.gridPosition + directions[i];
-
-            if (IsInside(next))
-                neighbors.Add(grid[next.x, next.y]);
-        }
-
-        return neighbors;
     }
 
     private int GetDistance(Node a, Node b)
@@ -215,14 +218,15 @@ public class RoomGridPathfinder : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.white;
+        bool useRuntimeGrid = Application.isPlaying && grid != null;
 
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
-                Vector3 pos = Application.isPlaying && grid != null ? grid[x, y].worldPosition : GridToWorld(new Vector2Int(x, y));
-                Gizmos.color = Application.isPlaying && grid != null && !grid[x, y].walkable ? Color.white : Color.white;
+                Node node = useRuntimeGrid ? grid[x, y] : null;
+                Vector3 pos = node != null ? node.worldPosition : GridToWorld(new Vector2Int(x, y));
+                Gizmos.color = node != null && !node.walkable ? Color.red : Color.green; // OPTIMIZED: use the correct gizmo color for walkable vs blocked cells.
                 Gizmos.DrawWireCube(pos, new Vector3(cellSize * 0.9f, 0.1f, cellSize * 0.9f));
             }
         }

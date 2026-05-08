@@ -405,7 +405,7 @@ MonoBehaviour:
   roomGridPathfinder: {fileID: 1314330613538708521}
   roomTrigger: {fileID: 6932709881762588150}
   minEnemyCount: 3
-  maxEnemyCount: 16
+  maxEnemyCount: 9
 --- !u!1 &5766056255454492240 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2951924980324243470, guid: 4b4c7bce064a1af41a82165db419e1c4, type: 3}

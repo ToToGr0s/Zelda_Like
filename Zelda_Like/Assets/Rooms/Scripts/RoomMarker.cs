@@ -3,7 +3,9 @@ using UnityEngine;
 public enum RoomMarkerType
 {
     Locked,
-    Pushable
+    Pushable,
+    Merchant,
+    Boss
 }
 
 public class RoomMarker : MonoBehaviour
