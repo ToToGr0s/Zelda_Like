@@ -6,14 +6,41 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private Slider healthSlider;
 
-    private void Start()
+    private void Awake()
     {
-        healthSlider.maxValue = playerHealth.GetMaxHealth();
-        healthSlider.value = playerHealth.GetCurrentHealth();
+        if (playerHealth == null)
+            playerHealth = FindFirstObjectByType<PlayerHealth>(); // OPTIMIZED: resolve player health once when not assigned.
+
+        if (healthSlider == null)
+            healthSlider = GetComponent<Slider>();
     }
 
-    private void Update()
+    private void Start()
     {
-        healthSlider.value = playerHealth.GetCurrentHealth();
+        if (playerHealth == null || healthSlider == null)
+            return;
+
+        UpdateSlider(playerHealth.GetCurrentHealth(), playerHealth.GetMaxHealth());
+    }
+
+    private void OnEnable()
+    {
+        if (playerHealth != null)
+            playerHealth.OnHealthChanged += UpdateSlider;
+    }
+
+    private void OnDisable()
+    {
+        if (playerHealth != null)
+            playerHealth.OnHealthChanged -= UpdateSlider;
+    }
+
+    private void UpdateSlider(int current, int max)
+    {
+        if (healthSlider == null)
+            return;
+
+        healthSlider.maxValue = max;
+        healthSlider.value = current;
     }
 }

@@ -9,11 +9,15 @@ public class PlayerHealth : MonoBehaviour
     private int currentHealth;
     private bool isDead;
     private PlayerInput playerInput;
+    private PlayerBonusManager bonusManager;
+
+    public event System.Action<int, int> OnHealthChanged;
 
     private void Awake()
     {
         currentHealth = maxHealth;
         playerInput = GetComponent<PlayerInput>();
+        bonusManager = GetComponent<PlayerBonusManager>(); // OPTIMIZED: cache bonus manager instead of resolving it on every hit.
 
         if (deathPanel != null)
             deathPanel.SetActive(false);
@@ -24,13 +28,25 @@ public class PlayerHealth : MonoBehaviour
         if (isDead)
             return;
 
+        if (bonusManager != null && bonusManager.IsInvincible)
+            return;
+
+        if (bonusManager != null && bonusManager.HasShield)
+        {
+            bonusManager.ConsumeShield();
+            return;
+        }
+
         currentHealth -= damage;
+        SoundManager.Instance?.PlaySFX(SoundManager.Instance.playerHit);
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
         }
+
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     public void Heal(int amount)
@@ -42,6 +58,8 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     public int GetCurrentHealth()
@@ -59,38 +77,50 @@ public class PlayerHealth : MonoBehaviour
         return isDead;
     }
 
+    public void IncreaseMaxHealth(int amount)
+    {
+        maxHealth += amount;
+        currentHealth += amount;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
     public void ResetHealth()
     {
-        currentHealth = maxHealth;
-        isDead = false;
-
-        if (playerInput != null)
-            playerInput.ActivateInput();
-
-        if (deathPanel != null)
-            deathPanel.SetActive(false);
+        ResetState(false);
     }
 
     public void FullReset()
     {
-        currentHealth = maxHealth;
-        isDead = false;
-
-        if (playerInput != null)
-            playerInput.ActivateInput();
-
-        if (deathPanel != null)
-            deathPanel.SetActive(false);
+        ResetState(true);
     }
 
     private void Die()
     {
-        isDead = true;
+        if (bonusManager != null && bonusManager.HasRevive)
+        {
+            bonusManager.ConsumeRevive();
+            currentHealth = 1;
+            OnHealthChanged?.Invoke(currentHealth, maxHealth);
+            return;
+        }
 
-        if (playerInput != null)
-            playerInput.DeactivateInput();
+        isDead = true;
+        playerInput?.DeactivateInput();
 
         if (deathPanel != null)
             deathPanel.SetActive(true);
+    }
+
+    private void ResetState(bool notify)
+    {
+        currentHealth = maxHealth;
+        isDead = false;
+        playerInput?.ActivateInput();
+
+        if (deathPanel != null)
+            deathPanel.SetActive(false);
+
+        if (notify)
+            OnHealthChanged?.Invoke(currentHealth, maxHealth); // OPTIMIZED: shared reset path removes duplicate state restoration logic.
     }
 }

@@ -36,15 +36,8 @@ public class PlayerFight : MonoBehaviour
         GameObject currentWeapon = inventory.GetCurrentWeapon();
         if (currentWeapon == null) return;
 
-        MeleeWeapon meleeWeapon = currentWeapon.GetComponent<MeleeWeapon>();
-        if (meleeWeapon != null)
-        {
-            meleeWeapon.Use();
-            return;
-        }
-
-        RangedWeapon rangedWeapon = currentWeapon.GetComponent<RangedWeapon>();
-        if (rangedWeapon != null)
-            rangedWeapon.Use();
+        PlayerWeapon weapon = currentWeapon.GetComponent<PlayerWeapon>();
+        if (weapon != null)
+            weapon.Use();
     }
 }

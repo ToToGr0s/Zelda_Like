@@ -4,12 +4,7 @@ public class WeaponHUDManager : MonoBehaviour
 {
     [SerializeField] private RectTransform overlay;
     [SerializeField] private RectTransform[] weaponSlots;
-    private PlayerInventory inventory;
-
-    private void Awake()
-    {
-        inventory = FindFirstObjectByType<PlayerInventory>();
-    }
+    [SerializeField] private PlayerInventory inventory;
 
     public void SetSelectedWeapon(int index)
     {

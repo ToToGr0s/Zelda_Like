@@ -5,6 +5,11 @@ public class PlayerInventory : MonoBehaviour
     [Header("Key")]
     public bool hasKey;
 
+    [Header("Coins")]
+    [SerializeField] private int coins;
+
+    public event System.Action<int> OnCoinsChanged;
+
     [Header("Weapons")]
     [SerializeField] private Transform weaponHolder;
     [SerializeField] private GameObject[] weaponPrefabs;
@@ -66,5 +71,26 @@ public class PlayerInventory : MonoBehaviour
 
         hasKey = false;
         return true;
+    }
+
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        OnCoinsChanged?.Invoke(coins);
+    }
+
+    public bool SpendCoins(int amount)
+    {
+        if (coins < amount)
+            return false;
+
+        coins -= amount;
+        OnCoinsChanged?.Invoke(coins);
+        return true;
+    }
+
+    public int GetCoins()
+    {
+        return coins;
     }
 }

@@ -44,7 +44,9 @@ public class MovementController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 move = new Vector3(inputDirection.x, 0f, inputDirection.y);
-        rb.linearVelocity = move * moveSpeed * speedMultiplier;
+        Vector3 velocity = move * moveSpeed * speedMultiplier;
+        velocity.y = rb.linearVelocity.y;
+        rb.linearVelocity = velocity;
     }
 
     public Vector2 GetMoveDirection()

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TreeCuller : MonoBehaviour
 {
@@ -10,92 +10,103 @@ public class TreeCuller : MonoBehaviour
     public Color gizmoWireColor = new Color(1f, 0f, 0f, 1f);
 
     private TerrainData terrainData;
-    private Dictionary<int, TreeInstance> hiddenTrees = new Dictionary<int, TreeInstance>();
+    private readonly Dictionary<int, TreeInstance> hiddenTrees = new();
+    private Bounds cullBounds;
 
-    void Start()
+    private void Start()
     {
         if (terrain == null)
             terrain = Terrain.activeTerrain;
-    
+
+        if (terrain == null)
+        {
+            enabled = false;
+            return;
+        }
+
         terrainData = terrain.terrainData;
     }
 
-    void Update()
+    private void Update()
     {
+        if (terrainData == null)
+            return;
+
         UpdateTreeVisibility();
     }
-    
-    void OnApplicationQuit()
+
+    private void OnApplicationQuit()
     {
         RestoreAllTrees();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         RestoreAllTrees();
     }
 
-    void RestoreAllTrees()
+    private void RestoreAllTrees()
     {
-        if (hiddenTrees.Count == 0) return;
+        if (terrainData == null || hiddenTrees.Count == 0)
+            return;
 
         TreeInstance[] trees = terrainData.treeInstances;
 
-        foreach (var kvp in hiddenTrees)
-        {
+        foreach (KeyValuePair<int, TreeInstance> kvp in hiddenTrees)
             trees[kvp.Key] = kvp.Value;
-        }
 
         terrainData.treeInstances = trees;
         terrain.Flush();
         hiddenTrees.Clear();
     }
 
-    Vector3 GetZoneCenter()
+    private Vector3 GetZoneCenter()
     {
         return transform.position + transform.TransformDirection(cullOffset);
     }
 
-    void UpdateTreeVisibility()
+    private void UpdateTreeVisibility()
     {
         TreeInstance[] trees = terrainData.treeInstances;
         bool modified = false;
 
-        Bounds cullBounds = new Bounds(GetZoneCenter(), cullBox);
+        cullBounds.center = GetZoneCenter();
+        cullBounds.size = cullBox;
 
         for (int i = 0; i < trees.Length; i++)
         {
             Vector3 worldPos = Vector3.Scale(trees[i].position, terrainData.size) + terrain.transform.position;
             bool inZone = cullBounds.Contains(worldPos);
 
-            if (inZone && trees[i].widthScale > 0)
+            if (inZone && trees[i].widthScale > 0f)
             {
                 hiddenTrees[i] = trees[i];
-                trees[i].widthScale = 0;
-                trees[i].heightScale = 0;
+                trees[i].widthScale = 0f;
+                trees[i].heightScale = 0f;
                 modified = true;
             }
-            else if (!inZone && trees[i].widthScale == 0 && hiddenTrees.ContainsKey(i))
+            else if (!inZone && trees[i].widthScale == 0f && hiddenTrees.TryGetValue(i, out TreeInstance originalTree))
             {
-                trees[i] = hiddenTrees[i];
+                trees[i] = originalTree; // OPTIMIZED: restore using a single dictionary lookup.
                 hiddenTrees.Remove(i);
                 modified = true;
             }
         }
 
-        if (modified)
-        {
-            terrainData.treeInstances = trees;
-            terrain.Flush();
-        }
+        if (!modified)
+            return;
+
+        terrainData.treeInstances = trees;
+        terrain.Flush();
     }
 
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
+        Vector3 zoneCenter = GetZoneCenter();
         Gizmos.color = gizmoFillColor;
-        Gizmos.DrawCube(GetZoneCenter(), cullBox);
+        Gizmos.DrawCube(zoneCenter, cullBox);
 
         Gizmos.color = gizmoWireColor;
-        Gizmos.DrawWireCube(GetZoneCenter(), cullBox);
+        Gizmos.DrawWireCube(zoneCenter, cullBox);
     }
 }
