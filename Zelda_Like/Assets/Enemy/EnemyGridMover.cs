@@ -128,6 +128,7 @@ public class EnemyGridMover : MonoBehaviour
         if (distanceToPlayerSqr <= stopDistanceSqr)
         {
             ClearCurrentPath();
+            currentMoveDir = Vector2.zero;
             return;
         }
 
@@ -248,12 +249,17 @@ public class EnemyGridMover : MonoBehaviour
     private bool MoveAlongCurrentPath(float moveSpeed)
     {
         if (!HasActivePath())
+        {
+            currentMoveDir = Vector2.zero;
             return false;
+        }
 
         Vector3 position = transform.position;
         Vector3 nextPoint = currentPath[currentIndex];
         Vector3 moveTarget = new Vector3(nextPoint.x, position.y, nextPoint.z);
-        transform.position = Vector3.MoveTowards(position, moveTarget, moveSpeed * Time.deltaTime); // OPTIMIZED: shared path movement logic avoids duplicated work.
+        Vector3 toTarget = (moveTarget - position);
+        currentMoveDir = toTarget.sqrMagnitude > 0.0001f ? new Vector2(toTarget.x, toTarget.z).normalized : Vector2.zero;
+        transform.position = Vector3.MoveTowards(position, moveTarget, moveSpeed * Time.deltaTime);
 
         if ((transform.position - moveTarget).sqrMagnitude > reachDistanceSqr)
             return false;
@@ -261,6 +267,8 @@ public class EnemyGridMover : MonoBehaviour
         currentIndex++;
         return currentIndex >= currentPath.Count;
     }
+
+    private Vector2 currentMoveDir;
 
     private bool HasActivePath()
     {
@@ -271,6 +279,12 @@ public class EnemyGridMover : MonoBehaviour
     {
         currentPath = null;
         currentIndex = 0;
+    }
+
+    /// <summary>Returns the normalized XZ movement direction from the last frame (zero if not moving).</summary>
+    public Vector2 GetCurrentMoveDirection()
+    {
+        return currentMoveDir;
     }
 
     private void CacheDistanceSquares()
