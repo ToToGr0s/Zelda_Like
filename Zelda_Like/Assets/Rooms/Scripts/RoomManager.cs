@@ -17,6 +17,10 @@ public class RoomManager : MonoBehaviour
     [Header("Themes")]
     [SerializeField] private RoomTheme[] themes;
 
+    [Header("Boss Room")]
+    [SerializeField] private GameObject bossRoomPrefab;
+    [SerializeField] private bool spawnBossRoom = true;
+
     [SerializeField] private float roomWidth = 20f;
     [SerializeField] private float roomLength = 20f;
     [SerializeField] private float floorY = -0.5f;
@@ -127,6 +131,9 @@ public class RoomManager : MonoBehaviour
                     expandableRooms.Add(newNode);
             }
         }
+
+        if (spawnBossRoom && bossRoomPrefab != null)
+            SpawnBossRoom();
 
         ApplyRoomConnections();
         ApplyLockedDoorOnLockedRoom();
@@ -363,6 +370,60 @@ public class RoomManager : MonoBehaviour
                 Instantiate(pushablePrefab, doorPoint.position, doorPoint.rotation, GetRoomContentParent(room));
             }
         }
+    }
+
+    private void SpawnBossRoom()
+    {
+        // Find the deepest leaf room that still has at least one free exit direction.
+        RoomNode bestLeaf = null;
+        Vector2Int bestDir = Vector2Int.zero;
+        int maxDepth = -1;
+
+        foreach (RoomNode room in rooms.Values)
+        {
+            if (room.IsStartRoom || room.Children.Count > 0)
+                continue;
+
+            List<Vector2Int> available = GetAvailableDirections(room);
+
+            if (available.Count == 0)
+                continue;
+
+            int depth = GetDepth(room);
+
+            if (depth > maxDepth)
+            {
+                maxDepth = depth;
+                bestLeaf = room;
+                bestDir = available.Contains(Vector2Int.up) ? Vector2Int.up : available[0];
+            }
+        }
+
+        if (bestLeaf == null)
+        {
+            Debug.LogWarning("[RoomManager] Aucune salle feuille avec une sortie libre pour la salle Boss!");
+            return;
+        }
+
+        Vector2Int bossGridPos = bestLeaf.GridPosition + bestDir;
+        RoomNode bossNode = CreateRoom(bossRoomPrefab, bossGridPos, bestLeaf, bestDir);
+        bestLeaf.Children.Add(bossNode);
+
+        Debug.Log("[RoomManager] Salle Boss spawned at " + bossGridPos);
+    }
+
+    private int GetDepth(RoomNode room)
+    {
+        int depth = 0;
+        RoomNode current = room;
+
+        while (current.Parent != null)
+        {
+            depth++;
+            current = current.Parent;
+        }
+
+        return depth;
     }
 
     private Transform GetRoomContentParent(RoomNode room)
