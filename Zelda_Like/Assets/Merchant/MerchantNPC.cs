@@ -88,9 +88,10 @@ public class MerchantNPC : MonoBehaviour
         if (!other.CompareTag(PlayerTag))
             return;
 
-        playerInventory = other.GetComponent<PlayerInventory>();
-        playerHealth = other.GetComponent<PlayerHealth>();
-        playerBonusManager = other.GetComponent<PlayerBonusManager>(); // OPTIMIZED: cache bonus manager once per interaction.
+        // Search up the hierarchy: works whether the trigger is on root or on a child collider.
+        playerInventory = other.GetComponent<PlayerInventory>() ?? other.GetComponentInParent<PlayerInventory>();
+        playerHealth = other.GetComponent<PlayerHealth>() ?? other.GetComponentInParent<PlayerHealth>();
+        playerBonusManager = other.GetComponent<PlayerBonusManager>() ?? other.GetComponentInParent<PlayerBonusManager>();
         playerInRange = true;
 
         if (shopUI != null)
